@@ -46,13 +46,15 @@ export default function HomeScreen() {
       {isSmallScreen ? (
         <Text style={styles.smallScreenText}>This content is visible on small screens.</Text>
       ) : (
-        <View style={styles.contentContainer}>
+        <View style={styles.contentMapContainer}>
           <TouchableOpacity style={styles.dropdown}>
             <Text style={styles.dropdownText}>Select from Map</Text>
             <Ionicons name="grid-outline" size={18} color="#444" />
           </TouchableOpacity>
           <View style={styles.mapContainer}>
-            {Platform.OS === 'web' && <WebMap />}
+            <div style={{ width: '100%', height: 'calc(100% - 68px)', borderRadius: 16, overflow: 'hidden' }}>
+              <WebMap />
+            </div>
           </View>
         </View>
       )}
@@ -86,28 +88,28 @@ function Card({ item }: { item: CardItem }) {
   const navigation = useNavigation() as any;
 
   return (
-    <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.thumbnail} />
-      <View style={styles.cardContent}>
-        <TouchableOpacity onPress={() => navigation.navigate('about')}>
+    <TouchableOpacity onPress={() => navigation.navigate('about')}>
+      <View style={styles.card}>
+        <Image source={{ uri: item.image }} style={styles.thumbnail} />
+        <View style={styles.cardContent}>
           <Text style={styles.title}>{item.title}</Text>
-        </TouchableOpacity>
-        <View style={styles.subtitleRow}>
-          <Ionicons name="business-outline" size={14} color="#555" />
-          <Text style={styles.subtitle}>{item.subtitle}</Text>
-        </View>
-        <View style={styles.badges}>
-          <View style={[styles.badge, { backgroundColor: '#e5f0fb' }]}>
-            <Ionicons name="document-text-outline" size={14} color="#2563eb" />
-            <Text style={[styles.badgeText, { color: '#2563eb' }]}>{item.documents}</Text>
+          <View style={styles.subtitleRow}>
+            <Ionicons name="business-outline" size={14} color="#555" />
+            <Text style={styles.subtitle}>{item.subtitle}</Text>
           </View>
-          <View style={[styles.badge, { backgroundColor: '#fde8e8' }]}>
-            <Ionicons name="alert-circle-outline" size={14} color="#ef4444" />
-            <Text style={[styles.badgeText, { color: '#ef4444' }]}>{item.issues}</Text>
+          <View style={styles.badges}>
+            <View style={[styles.badge, { backgroundColor: '#e5f0fb' }]}>
+              <Ionicons name="document-text-outline" size={14} color="#2563eb" />
+              <Text style={[styles.badgeText, { color: '#2563eb' }]}>{item.documents}</Text>
+            </View>
+            <View style={[styles.badge, { backgroundColor: '#fde8e8' }]}>
+              <Ionicons name="alert-circle-outline" size={14} color="#ef4444" />
+              <Text style={[styles.badgeText, { color: '#ef4444' }]}>{item.issues}</Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
   mapContainer: {
     borderRadius: 24,
     width: '100%',
+    height: '100%',
   },
   smallScreenText: {
     display: 'none',
@@ -123,12 +126,21 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  contentContainer: {
+  contentMapContainer: {
     flex: 1,
-    backgroundColor: '#cfeafe',
+    backgroundColor: '#D5EDFC',
     margin: 18,
     borderRadius: 24,
     padding: 16,
+    width: '100%',
+  },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: '#D5EDFC',
+    margin: 18,
+    borderRadius: 24,
+    padding: 16,
+    maxWidth: 500,
   },
   dropdown: {
     backgroundColor: 'white',

@@ -1,0 +1,27 @@
+.leaflet-control-zoom {
+    box-shadow: none !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    border: none !important;
+  }
+
+  .leaflet-control-zoom a {
+    background-color: white !important;
+    color: black !important;
+    font-size: 22px !important;
+    height: 42px !important;
+    line-height: 42px !important;
+    width: 42px !important;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5 !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .leaflet-control-zoom a:last-child {
+    border-bottom: none !important;
+  }
+
+  .leaflet-control-zoom a:hover {
+    background-color: #f0f0f0 !important;
+    color: #000 !important;
+  }

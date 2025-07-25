@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function RootLayout() {
   return (
     <>
+    <StatusBar style="dark" />
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -17,12 +18,11 @@ export default function RootLayout() {
           source={{ uri: 'https://i.pravatar.cc/150?img=3' }}
           style={styles.avatar}
         />
-      </View>
+      </View>      
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
-    </SafeAreaView>
-      <StatusBar style="dark" />
+    </SafeAreaView>      
     </>
   );
 }

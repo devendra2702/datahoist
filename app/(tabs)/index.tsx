@@ -1,6 +1,8 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Dimensions, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import WebMap from './WebMap';
 
 const data = [
   {
@@ -22,13 +24,43 @@ const data = [
 ];
 
 export default function HomeScreen() {
+
+  const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      setScreenWidth(Dimensions.get('window').width);
+    };
+
+    const subscription = Dimensions.addEventListener('change', updateDimensions);
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const isSmallScreen = screenWidth < 768; // Example breakpoint
+
   return (
+    <View style={styles.mainContainer}>
+      {isSmallScreen ? (
+        <Text style={styles.smallScreenText}>This content is visible on small screens.</Text>
+      ) : (
+        <View style={styles.contentContainer}>
+          <TouchableOpacity style={styles.dropdown}>
+            <Text style={styles.dropdownText}>Select from Map</Text>
+            <Ionicons name="grid-outline" size={18} color="#444" />
+          </TouchableOpacity>
+          <View style={styles.mapContainer}>
+            {Platform.OS === 'web' && <WebMap />}
+          </View>
+        </View>
+      )}
       <View style={styles.contentContainer}>
         <TouchableOpacity style={styles.dropdown}>
           <Text style={styles.dropdownText}>Select from List</Text>
           <Ionicons name="grid-outline" size={18} color="#444" />
         </TouchableOpacity>
-
         <FlatList
           data={data}
           keyExtractor={(item) => item.id}
@@ -37,15 +69,29 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         />
       </View>
+    </View>
   );
 }
 
-function Card({ item }) {
+type CardItem = {
+  id: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  documents: number;
+  issues: number;
+};
+
+function Card({ item }: { item: CardItem }) {
+  const navigation = useNavigation() as any;
+
   return (
     <View style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.thumbnail} />
       <View style={styles.cardContent}>
-        <Text style={styles.title}>{item.title}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('about')}>
+          <Text style={styles.title}>{item.title}</Text>
+        </TouchableOpacity>
         <View style={styles.subtitleRow}>
           <Ionicons name="business-outline" size={14} color="#555" />
           <Text style={styles.subtitle}>{item.subtitle}</Text>
@@ -66,6 +112,17 @@ function Card({ item }) {
 }
 
 const styles = StyleSheet.create({
+  mapContainer: {
+    borderRadius: 24,
+    width: '100%',
+  },
+  smallScreenText: {
+    display: 'none',
+  },
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   contentContainer: {
     flex: 1,
     backgroundColor: '#cfeafe',
